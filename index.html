@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>xTra Player — Playlists</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">📺</div>
+      <div>
+        <h1>xTra Player</h1>
+        <p class="sub">Gerenciador de playlists por MAC</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>1. Encontre o seu aparelho</h2>
+      <p class="hint">Digite o endereço MAC mostrado na aba <b>Playlists</b> do app, no aparelho que você quer configurar.</p>
+      <div class="row">
+        <input id="mac" type="text" placeholder="AA:BB:CC:DD:EE:FF" maxlength="17" autocomplete="off" spellcheck="false" />
+        <button id="btnBuscar" class="btn primary">Buscar</button>
+      </div>
+      <p id="macMsg" class="msg"></p>
+    </section>
+
+    <section id="painel" class="card hidden">
+      <div class="panel-head">
+        <h2>2. Playlists deste aparelho</h2>
+        <span id="macBadge" class="badge"></span>
+      </div>
+      <p class="hint warn">⚠️ Qualquer pessoa que souber esse MAC pode ver e editar estas listas. Não compartilhe o endereço em público.</p>
+
+      <div id="lista" class="lista"></div>
+      <p id="listaVazia" class="hint hidden">Nenhuma playlist cadastrada ainda para este aparelho.</p>
+
+      <hr />
+
+      <h3>Adicionar playlist</h3>
+      <div class="form">
+        <label>Nome
+          <input id="pName" type="text" placeholder="Ex.: Minha lista" />
+        </label>
+
+        <label>Tipo
+          <div class="toggle">
+            <button type="button" class="seg active" data-type="m3u">Lista M3U</button>
+            <button type="button" class="seg" data-type="xtream">Xtream Codes</button>
+          </div>
+        </label>
+
+        <label id="lblServer">URL da lista M3U
+          <input id="pServer" type="text" placeholder="https://.../lista.m3u8" />
+        </label>
+
+        <div id="xtreamFields" class="hidden">
+          <label>Usuário
+            <input id="pUser" type="text" autocomplete="off" />
+          </label>
+          <label>Senha
+            <input id="pPass" type="text" autocomplete="off" />
+          </label>
+        </div>
+
+        <button id="btnAdd" class="btn primary">+ Adicionar</button>
+        <p id="formMsg" class="msg"></p>
+      </div>
+    </section>
+
+    <footer>
+      <p>xTra Player • Autoria: xTra Soluções</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
