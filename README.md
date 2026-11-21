@@ -1,87 +1,49 @@
-# xTra Player — Playlists (site)
+# xTra Player — conta e playlists
 
-Site estático (sem servidor) para adicionar/remover playlists do app **xTra Player** usando o
-**endereço MAC do aparelho** como chave. O que você fizer aqui aparece no app (aba **Playlists**,
-botão "Sincronizar agora"), e o que você adicionar/remover no app aparece aqui.
+Site estático hospedado no GitHub Pages. Usa Firebase Authentication (e-mail/senha) e Realtime Database.
 
-Como é 100% estático, ele usa o **Firebase Realtime Database** (gratuito) como "banco de dados" —
-tanto o site quanto o app falam direto com ele por HTTP simples, sem nenhum SDK.
+## O que foi implementado nesta branch
+- Cadastro de membros com e-mail e senha.
+- Login e logout.
+- Playlists vinculadas ao UID autenticado, não ao MAC.
+- Painel administrativo para visualizar e gerenciar playlists de todas as contas marcadas como administradoras no banco.
+- O cadastro público nunca concede privilégios administrativos.
 
-## 1) Crie o banco de dados (grátis, ~5 minutos)
+## Configuração Firebase
+Projeto: `xtrasoluctions`
 
-1. Acesse https://console.firebase.google.com e crie um projeto (pode ser gratuito, plano Spark).
-2. No menu lateral, vá em **Build > Realtime Database** e clique em **Criar banco de dados**.
-   Escolha qualquer região. Nesta etapa, pode iniciar em "modo de teste" — vamos ajustar a regra certa a seguir.
-3. Copie a **URL do banco de dados**, mostrada no topo da página (algo como
-   `https://SEU-PROJETO-default-rtdb.firebaseio.com` — pode variar um pouco conforme a região).
-4. Clique na aba **Regras** e substitua pelo conteúdo abaixo, depois **Publicar**:
+Realtime Database: `https://xtrasoluctions-default-rtdb.europe-west1.firebasedatabase.app`
 
-```json
-{
-  "rules": {
-    "playlists": {
-      "$mac": {
-        ".read": true,
-        ".write": true
-      }
-    }
-  }
-}
+1. Em Firebase Console → Authentication → Sign-in method, habilite **E-mail/senha**.
+2. Em Realtime Database → Rules, publique o conteúdo de `database.rules.json`.
+3. Cadastre sua conta pelo site.
+4. Em Authentication → Users, copie o UID da sua conta.
+5. Em Realtime Database → Data, crie `admins/SEU_UID` com valor booleano `true`.
+6. Saia e entre novamente no site. Seu painel mostrará ADMINISTRADOR.
+
+O nó `admins` não pode ser gravado por clientes. Só o console ou um ambiente administrativo confiável deve conceder esse privilégio.
+
+## Estrutura
+```
+admins/UID_DO_ADMIN: true
+users/UID/
+  profile/{name,email,createdAt}
+  playlists/items/ID/{name,type,server,user,pass,createdAt}
 ```
 
-> ⚠️ **Sobre segurança:** essas regras deixam qualquer pessoa que souber um endereço MAC ler/editar
-> as playlists daquele MAC — não existe login nem senha, só o próprio MAC funcionando como uma
-> espécie de "código de acesso" (é o mesmo esquema usado por ativação "por MAC" nos sistemas tipo
-> MAG/Stalker). Isso é adequado para uso pessoal/familiar, mas não compartilhe o MAC em público.
+Cada membro lê e escreve apenas no próprio nó. Administradores podem ler e gerenciar os nós de todos os usuários.
 
-## 2) Configure a URL nos dois lados
+## Estado da integração Android
+A atualização Android está sendo preparada na branch `feat/firebase-auth-accounts` do repositório `succotash`, com login Firebase e sincronização por `users/{uid}/playlists/items`. Aguarde a aprovação dos dois pull requests, a confirmação do build e a migração controlada dos registros antigos por MAC antes de publicar as regras definitivas. Não publique as novas regras enquanto o app antigo ainda estiver em uso, pois ele perderá acesso ao caminho legado.
 
-Cole a URL do banco (sem barra no final) em **dois lugares**, exatamente igual:
+## Credenciais Xtream
+As credenciais ficam protegidas pelas regras de UID, mas qualquer cliente autenticado pode ler as próprias credenciais. Use senhas exclusivas e não compartilhe capturas ou logs com essas informações.
 
-- Neste site: arquivo `app.js`, constante `DB_URL` no topo do arquivo.
-- No app Android: arquivo `app/src/main/java/com/xtrasolucoes/xtraplayer/Data.kt`, constante
-  `CLOUD_DB_URL` perto do topo do arquivo. Depois disso, gere o APK de novo (Actions > Build APK,
-  ou `gradle :app:assembleRelease`).
 
-## 3) Publique o site no GitHub Pages
+## Ferramentas administrativas do site
+- Busca de membros por nome, e-mail ou UID.
+- Alteração do nome exibido do membro.
+- Edição e remoção de playlists de qualquer membro.
+- Exclusão do nó de dados do membro (`users/UID`), após duas confirmações.
 
-1. Suba esta pasta (`index.html`, `style.css`, `app.js`) para um repositório no GitHub — pode ser
-   o mesmo repositório do app, em uma subpasta, ou um repositório novo só para o site.
-2. No repositório, vá em **Settings > Pages**.
-3. Em "Source", escolha **Deploy from a branch**, selecione a branch (ex.: `main`) e a pasta onde
-   estão os arquivos (`/ (root)` se a pasta for a raiz do repositório, ou `/docs` se você a renomeou
-   para `docs`).
-4. Salve. Em alguns minutos o GitHub mostra o link do site (algo como
-   `https://seu-usuario.github.io/seu-repositorio/`).
-
-## Como usar
-
-1. No aparelho, abra o app > aba **Playlists** e copie o endereço MAC mostrado lá.
-2. No site, cole o MAC e toque em **Buscar**.
-3. Adicione ou remova playlists por ali.
-4. No app, toque em **Sincronizar agora** (ou apenas reabra a aba Playlists) para trazer as
-   mudanças para o aparelho.
-
-## Por que "endereço MAC" e não o MAC real do Wi-Fi?
-
-Desde o Android 6 nenhum app consegue mais ler o MAC real da placa de Wi-Fi (por privacidade), e
-desde o Android 10 isso vale até para apps com permissões especiais. Por isso o app **gera** um
-endereço só dele (no mesmo formato `AA:BB:CC:DD:EE:FF`), uma vez só, na primeira abertura, e usa
-esse endereço como identidade — exatamente como fazem os sistemas de ativação "por MAC" mais comuns
-em players de IPTV.
-
-## Estrutura dos dados no Firebase
-
-```
-playlists/
-  AA:BB:CC:DD:EE:FF/        <- um nó por aparelho (MAC)
-    items/
-      -NxAbC123/            <- chave gerada automaticamente por playlist
-        name: "Minha lista"
-        type: "m3u" | "xtream"
-        server: "http://..."
-        user: ""             <- só preenchido quando type = "xtream"
-        pass: ""
-```
-# uploader-playlists-for-xtra
-# uploader-playlists-for-xtra
+**Limite importante:** o painel web é um cliente Firebase sem Firebase Admin SDK. Por segurança, ele não consegue excluir, bloquear ou redefinir a senha da identidade em Authentication. Apagar `users/UID` remove perfil e playlists do Realtime Database, mas a pessoa ainda poderá entrar e criar dados novamente. A exclusão/desativação real da conta exige backend confiável com Firebase Admin SDK (por exemplo, Cloud Functions/servidor protegido), nunca uma chave administrativa no navegador.

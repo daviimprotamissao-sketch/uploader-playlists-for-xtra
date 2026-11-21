@@ -142,3 +142,12 @@ footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 3
   #xtreamFields { display: grid !important; grid-template-columns: 1fr 1fr; gap: 14px; }
   #xtreamFields.hidden { display: none !important; }
 }
+
+/* Administração */
+.admin-user { border:1px solid var(--border); border-radius:14px; padding:14px; margin:14px 0; background:#090909; }
+.admin-user h3 { margin:0 0 4px; overflow-wrap:anywhere; }
+.admin-tools,.actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.admin-tools .btn,.actions .btn { padding:8px 11px; font-size:12px; }
+.btn.danger { color:#ff7777; border-color:#713333; }
+.admin-search { display:flex; flex-direction:column; gap:6px; color:var(--muted); font-size:13px; }
+.admin-search input { box-sizing:border-box; }
