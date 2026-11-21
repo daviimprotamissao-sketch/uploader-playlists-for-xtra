@@ -33,8 +33,8 @@ users/UID/
 
 Cada membro lê e escreve apenas no próprio nó. Administradores podem ler e gerenciar os nós de todos os usuários.
 
-## Importante: Android ainda não migrado
-O aplicativo Android atual ainda usa `playlists/{mac}/items`. Esta branch prepara o site e o esquema autenticado, mas a sincronização Android ainda precisa ser atualizada para `users/{uid}/playlists/items` antes de aplicar as regras no banco. Não publique as novas regras antes dessa migração, pois o app antigo perderia o acesso às playlists.
+## Estado da integração Android
+A atualização Android está sendo preparada na branch `feat/firebase-auth-accounts` do repositório `succotash`, com login Firebase e sincronização por `users/{uid}/playlists/items`. Aguarde a aprovação dos dois pull requests, a confirmação do build e a migração controlada dos registros antigos por MAC antes de publicar as regras definitivas. Não publique as novas regras enquanto o app antigo ainda estiver em uso, pois ele perderá acesso ao caminho legado.
 
 ## Credenciais Xtream
 As credenciais ficam protegidas pelas regras de UID, mas qualquer cliente autenticado pode ler as próprias credenciais. Use senhas exclusivas e não compartilhe capturas ou logs com essas informações.
