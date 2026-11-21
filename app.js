@@ -5,7 +5,7 @@
 // Troque pela "URL do banco de dados" do SEU projeto Firebase Realtime Database
 // (sem barra no final). Veja o passo a passo em README.md.
 // A MESMA URL também deve ser colada em CLOUD_DB_URL no arquivo Data.kt do app Android.
-const DB_URL = "https://SEU-PROJETO-default-rtdb.firebaseio.com";
+const DB_URL = "https://console.firebase.google.com/project/xtrasoluctions/database/xtrasoluctions-default-rtdb/data/~2F";
 // ==============================================================
 
 const $ = (id) => document.getElementById(id);
