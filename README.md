@@ -38,3 +38,12 @@ A atualização Android está sendo preparada na branch `feat/firebase-auth-acco
 
 ## Credenciais Xtream
 As credenciais ficam protegidas pelas regras de UID, mas qualquer cliente autenticado pode ler as próprias credenciais. Use senhas exclusivas e não compartilhe capturas ou logs com essas informações.
+
+
+## Ferramentas administrativas do site
+- Busca de membros por nome, e-mail ou UID.
+- Alteração do nome exibido do membro.
+- Edição e remoção de playlists de qualquer membro.
+- Exclusão do nó de dados do membro (`users/UID`), após duas confirmações.
+
+**Limite importante:** o painel web é um cliente Firebase sem Firebase Admin SDK. Por segurança, ele não consegue excluir, bloquear ou redefinir a senha da identidade em Authentication. Apagar `users/UID` remove perfil e playlists do Realtime Database, mas a pessoa ainda poderá entrar e criar dados novamente. A exclusão/desativação real da conta exige backend confiável com Firebase Admin SDK (por exemplo, Cloud Functions/servidor protegido), nunca uma chave administrativa no navegador.
