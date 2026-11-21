@@ -3,78 +3,64 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>xTra Player — Playlists</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>" />
+<title>xTra Player — Conta e Playlists</title>
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">📺</div>
-      <div>
-        <h1>xTra Player</h1>
-        <p class="sub">Gerenciador de playlists por MAC</p>
-      </div>
-    </header>
+<div class="wrap">
+  <header><div class="logo">📺</div><div><h1>xTra Player</h1><p class="sub">Sua conta e suas playlists</p></div></header>
 
+  <section id="authCard" class="card">
+    <h2 id="authTitle">Entrar na sua conta</h2>
+    <p class="hint">Use sua conta xTra Player para acessar suas playlists em qualquer dispositivo.</p>
+    <div class="form">
+      <label>Nome (somente ao criar conta)<input id="displayName" type="text" autocomplete="name" placeholder="Seu nome" /></label>
+      <label>E-mail<input id="email" type="email" autocomplete="email" placeholder="voce@email.com" /></label>
+      <label>Senha<input id="password" type="password" autocomplete="current-password" placeholder="Mínimo de 6 caracteres" /></label>
+      <button id="authSubmit" class="btn primary">Entrar</button>
+      <button id="authToggle" class="btn ghost">Criar uma conta</button>
+      <p id="authMsg" class="msg"></p>
+    </div>
+  </section>
+
+  <main id="appPanel" class="hidden">
     <section class="card">
-      <h2>1. Encontre o seu aparelho</h2>
-      <p class="hint">Digite o endereço MAC mostrado na aba <b>Playlists</b> do app, no aparelho que você quer configurar.</p>
-      <div class="row">
-        <input id="mac" type="text" placeholder="AA:BB:CC:DD:EE:FF" maxlength="17" autocomplete="off" spellcheck="false" />
-        <button id="btnBuscar" class="btn primary">Buscar</button>
-      </div>
-      <p id="macMsg" class="msg"></p>
+      <div class="panel-head"><div><h2>Olá, <span id="userName"></span></h2><p id="userEmail" class="hint"></p></div><button id="logout" class="btn ghost">Sair</button></div>
+      <p id="roleBadge" class="badge">MEMBRO</p>
     </section>
 
-    <section id="painel" class="card hidden">
-      <div class="panel-head">
-        <h2>2. Playlists deste aparelho</h2>
-        <span id="macBadge" class="badge"></span>
-      </div>
-      <p class="hint warn">⚠️ Qualquer pessoa que souber esse MAC pode ver e editar estas listas. Não compartilhe o endereço em público.</p>
-
+    <section id="memberPanel" class="card">
+      <h2>Minhas playlists</h2>
+      <p class="hint">Estas playlists ficam vinculadas à sua conta e podem ser sincronizadas com o xTra Player.</p>
       <div id="lista" class="lista"></div>
-      <p id="listaVazia" class="hint hidden">Nenhuma playlist cadastrada ainda para este aparelho.</p>
-
+      <p id="listaVazia" class="hint">Nenhuma playlist cadastrada.</p>
       <hr />
-
       <h3>Adicionar playlist</h3>
       <div class="form">
-        <label>Nome
-          <input id="pName" type="text" placeholder="Ex.: Minha lista" />
-        </label>
-
-        <label>Tipo
-          <div class="toggle">
-            <button type="button" class="seg active" data-type="m3u">Lista M3U</button>
-            <button type="button" class="seg" data-type="xtream">Xtream Codes</button>
-          </div>
-        </label>
-
-        <label id="lblServer">URL da lista M3U
-          <input id="pServer" type="text" placeholder="https://.../lista.m3u8" />
-        </label>
-
+        <label>Nome<input id="pName" type="text" placeholder="Ex.: Minha lista" /></label>
+        <label>Tipo<div class="toggle"><button type="button" class="seg active" data-type="m3u">Lista M3U</button><button type="button" class="seg" data-type="xtream">Xtream Codes</button></div></label>
+        <label id="lblServer">URL da lista M3U<input id="pServer" type="text" placeholder="https://.../lista.m3u8" /></label>
         <div id="xtreamFields" class="hidden">
-          <label>Usuário
-            <input id="pUser" type="text" autocomplete="off" />
-          </label>
-          <label>Senha
-            <input id="pPass" type="text" autocomplete="off" />
-          </label>
+          <label>Usuário<input id="pUser" type="text" autocomplete="off" /></label>
+          <label>Senha<input id="pPass" type="password" autocomplete="new-password" /></label>
         </div>
-
         <button id="btnAdd" class="btn primary">+ Adicionar</button>
         <p id="formMsg" class="msg"></p>
       </div>
     </section>
 
-    <footer>
-      <p>xTra Player • Autoria: xTra Soluções</p>
-    </footer>
-  </div>
+    <section id="adminPanel" class="card hidden">
+      <h2>Painel administrativo</h2>
+      <p class="hint">Visualização e gerenciamento das playlists de todas as contas cadastradas.</p>
+      <div id="adminUsers"></div>
+    </section>
+  </main>
+  <footer><p>xTra Player • xTra Soluções</p></footer>
+</div>
 
-  <script src="app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
