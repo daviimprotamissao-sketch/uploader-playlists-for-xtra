@@ -1,6 +1,6 @@
 // xTra Player - Autoria: xTra Soluções
 // Site de gerenciamento de playlists por endereço MAC, para hospedar no GitHub Pages.
-//
+// i
 // ====================== CONFIGURE AQUI ======================
 // Troque pela "URL do banco de dados" do SEU projeto Firebase Realtime Database
 // (sem barra no final). Veja o passo a passo em README.md.
